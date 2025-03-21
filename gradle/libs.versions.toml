@@ -1,0 +1,31 @@
+[versions]
+junixsocketVersion = "2.10.1"
+
+[libraries]
+
+junixsocket-native-common = { module = "com.kohlschutter.junixsocket:junixsocket-native-common", version.ref = "junixsocketVersion" }
+junixsocket-common = { module = "com.kohlschutter.junixsocket:junixsocket-common", version.ref = "junixsocketVersion" }
+junixsocket-core = { module = "com.kohlschutter.junixsocket:junixsocket-core", version.ref = "junixsocketVersion" }
+
+janino = { module = "org.codehaus.janino:janino", version = "3.1.12" }
+jansi = { module = "org.fusesource.jansi:jansi", version = "2.4.1" }
+
+lockback-core = { module = "ch.qos.logback:logback-core" }
+logback-classic = { module = "ch.qos.logback:logback-classic" }
+
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-security-test = { module = "org.springframework.security:spring-security-test" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter-engine", version = "6.0.3" }
+bouncycastle = { module = "org.bouncycastle:bcpkix-jdk18on", version = "1.80" }
+
+byte-buddy-agent = { module = "net.bytebuddy:byte-buddy-agent", version = "1.18.7" }
+
+spring-shell = { module = "org.springframework.shell:spring-shell-dependencies", version = "4.0.1" }
+
+[bundles]
+junixsocket = ["junixsocket-native-common", "junixsocket-common", "junixsocket-core"]
+logback = ["lockback-core", "logback-classic", "janino", "jansi"]
+test-spring-boot = ["spring-boot-starter-test", "spring-security-test", "junit-jupiter"]
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version = "4.0.5" }

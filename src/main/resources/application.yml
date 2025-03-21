@@ -1,0 +1,22 @@
+demo:
+  max:
+    parallel:
+      workers: 4
+spring:
+  application:
+    name: demo
+  profiles:
+    active: g_dev
+    group:
+      g_dev:
+        - "default"
+        - "solr"
+  shell:
+    history:
+      enabled: false
+    interactive:
+      enabled: true
+    script:
+      enabled: true
+  main:
+    web-application-type: none
