@@ -2,7 +2,12 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
     java
-    id("org.springframework.boot") version "4.0.5"
+    id("org.springframework.boot") version "4.0.6"
+}
+
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
 }
 
 group = "com.example"
@@ -15,6 +20,13 @@ java {
 }
 
 dependencies {
+
+    constraints {
+        // Bug or Feature?
+        // implementation(libs.liquibase)
+    }
+
+    implementation(project(":sub"))
     implementation(platform(SpringBootPlugin.BOM_COORDINATES))
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
