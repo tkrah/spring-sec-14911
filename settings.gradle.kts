@@ -1,3 +1,4 @@
 rootProject.name = "demo"
 
-include("sub")
+include("server")
+include("shell")

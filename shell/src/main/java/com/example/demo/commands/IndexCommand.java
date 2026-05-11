@@ -1,11 +1,11 @@
-package com.example.demo.shell;
+package com.example.demo.commands;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.shell.core.command.annotation.Command;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.solr.SolrService;
+
 @Component
-@Profile("solr")
 public class IndexCommand {
 
 	private final SolrService solrService;
