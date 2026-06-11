@@ -1,34 +1,19 @@
-val taskSemaphore: Provider<BuildService<BuildServiceParameters.None>> by rootProject.extra
+import demo.TaskSemaphore
 
-val composeUp =
-    project.rootProject.tasks.named("e2eComposeUp") {
-        outputs.upToDateWhen { false }
-        usesService(taskSemaphore)
-    }
-val composeDown =
-    project.rootProject.tasks.named("e2eComposeDown") {
-        outputs.upToDateWhen { false }
-        usesService(taskSemaphore)
-    }
-
-val runTest =
-    tasks.register<Exec>("e2eRunTest") {
-        commandLine = listOf("echo", "e2eRunTest")
-        usesService(taskSemaphore)
+val taskSemaphore =
+    project.gradle.sharedServices.registerIfAbsent(
+        "taskSemaphore",
+        TaskSemaphore::class,
+    ) {
+        maxParallelUsages = 1
     }
 
 val integrationTest =
-    tasks.register("integrationTest") {
-        dependsOn(composeUp, runTest)
+    tasks.register<Exec>("integrationTest") {
+        val ts = taskSemaphore
+        doFirst {
+            ts.get().startUp("B", mapOf("PORT" to "5435"))
+        }
+        commandLine = listOf("echo", "B")
         usesService(taskSemaphore)
     }
-
-composeUp {
-    finalizedBy(composeDown)
-}
-composeDown {
-    mustRunAfter(integrationTest)
-}
-runTest {
-    mustRunAfter(composeUp)
-}
