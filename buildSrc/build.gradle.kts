@@ -1,5 +1,6 @@
 plugins {
     `kotlin-dsl`
+    `java-gradle-plugin`
 }
 
 java {
@@ -9,4 +10,12 @@ java {
 
 kotlin {
     jvmToolchain(25)
+}
+
+gradlePlugin {
+    plugins {
+        register("demo.task-semaphore-plugin") {
+            implementationClass = "demo.TaskSemaphorePlugin"
+        }
+    }
 }

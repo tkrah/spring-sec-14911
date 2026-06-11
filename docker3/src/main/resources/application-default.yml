@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 24
+      leakDetectionThreshold: 180000
+    url: jdbc:postgresql://localhost:5435/example?ApplicationName=Demo3-Tomcat&gssEncMode=disable
+    username: exampleuser
+    password: examplesecret

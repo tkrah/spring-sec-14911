@@ -1,0 +1,32 @@
+services:
+
+  db:
+    image: postgres:${POSTGRES_IMAGE_VERSION?:error}
+    mem_limit: 2g
+    security_opt:
+      - seccomp:docker-seccomp.json
+    cpus: '1'
+    ports:
+      - "0.0.0.0:${PG_TEST_PORT?:error}:5432"
+    shm_size: 1g
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - ./config/db/db-init.sh:/docker-entrypoint-initdb.d/db-init.sh:ro
+
+  db-wait:
+    image: etsmith/wait-for-it
+    cpus: '1'
+    command: ["db:5432", "-t", "10", "-s"]
+    depends_on:
+      db:
+        condition: service_started
+
+  db-start:
+    image: etsmith/wait-for-it
+    cpus: '1'
+    command: [ "db:5432", "-t", "10", "-s" ]
+    depends_on:
+      db-wait:
+        condition: service_completed_successfully
