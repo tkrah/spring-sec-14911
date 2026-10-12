@@ -1,3 +1,4 @@
+import demo.TomcatAlignmentRule
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
@@ -9,7 +10,9 @@ plugins {
     id("org.springframework.boot") version "4.1.0"
 }
 
-val mockitoAgent: Configuration by configurations.creating
+val mockitoAgent = configurations.create("mockitoAgent")
+
+val tomcatVersion = providers.gradleProperty("tomcat_version").get()
 
 dependencies {
 
@@ -53,6 +56,13 @@ dependencies {
     providedRuntime(libs.postgres.jdbc)
 
     mockitoAgent(libs.byte.buddy.agent)
+
+    components.all<TomcatAlignmentRule>()
+
+    constraints {
+        implementation(enforcedPlatform("org.apache.tomcat.embed:tomcat-virtual-platform:$tomcatVersion"))
+        providedRuntime(enforcedPlatform("org.apache.tomcat.embed:tomcat-virtual-platform:$tomcatVersion"))
+    }
 }
 
 tasks.test {
@@ -67,7 +77,7 @@ java {
 
 testing {
     suites {
-        val integrationTest by registering(JvmTestSuite::class) {
+        register<JvmTestSuite>("integrationTest") {
             targets {
                 all {
                     testTask.configure {
@@ -116,8 +126,8 @@ testing {
 taskSemaphoreExtension {
 }
 
-val testImplementation by configurations
-val integrationTestImplementation by configurations
+val testImplementation = configurations.getByName("testImplementation")
+val integrationTestImplementation = configurations.getByName("integrationTestImplementation")
 integrationTestImplementation.extendsFrom(testImplementation)
 
 val integrationTest =

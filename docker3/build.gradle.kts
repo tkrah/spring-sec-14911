@@ -9,7 +9,7 @@ plugins {
     id("org.springframework.boot") version "4.1.0"
 }
 
-val mockitoAgent: Configuration by configurations.creating
+val mockitoAgent = configurations.create("mockitoAgent")
 
 dependencies {
 
@@ -67,7 +67,7 @@ java {
 
 testing {
     suites {
-        val integrationTest by registering(JvmTestSuite::class) {
+        register<JvmTestSuite>("integrationTest") {
             targets {
                 all {
                     testTask.configure {
@@ -116,8 +116,8 @@ testing {
 taskSemaphoreExtension {
 }
 
-val testImplementation by configurations
-val integrationTestImplementation by configurations
+val testImplementation = configurations.getByName("testImplementation")
+val integrationTestImplementation = configurations.getByName("integrationTestImplementation")
 integrationTestImplementation.extendsFrom(testImplementation)
 
 val integrationTest =
